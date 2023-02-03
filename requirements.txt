@@ -1,3 +1,10 @@
-gym
-opencv-contrib-python==4.5.*
+gym[all]==0.23.1
+opencv-contrib-python==4.5.5.64
 pywin32
+ray[rllib]
+tensorflow
+torch
+dm_tree
+pandas
+numpy==1.23.5
+gputil

@@ -60,7 +60,7 @@ class Window:
 
         # for opencv.
         signed_ints_array = data_bit_map.GetBitmapBits(True)  # so true...
-        img = numpy.fromstring(signed_ints_array, dtype='uint8')
+        img = numpy.frombuffer(signed_ints_array, dtype="uint8")
         img.shape = (self.size.y, self.size.x, 4)  # intended swap because numpy
 
         dc_object.DeleteDC()
