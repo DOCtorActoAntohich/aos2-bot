@@ -8,11 +8,12 @@ import cv2
 
 from emi.controls import Controls
 from emi.settings import Settings
-from emi.window import Window
+from emi.windows.window import Window
+from emi.windows.hook_listener_thread import WindowsHookListenerThread
 
 
 class AoS2Environment(gym.Env):
-    Observation = numpy.ndarray
+    Observation = int
     Action = numpy.ndarray
     Reward = SupportsFloat
     Completed = bool
@@ -30,10 +31,12 @@ class AoS2Environment(gym.Env):
         self.observation_space = gym.spaces.Box(
             low=0,
             high=256,
-            shape=(768, 1366, 4)
+            shape=(768, 1366, 3)
         )
 
         self.window = Window(Settings.game_name)
+        self.hook_listener_thread = WindowsHookListenerThread(self.window.focus_change_callback)
+        self.pressed_buttons: list[Controls] = []
 
     def reset(
             self,
@@ -42,6 +45,9 @@ class AoS2Environment(gym.Env):
             return_info: bool = False,
             options: dict | None = None
     ) -> ResetResult:
+        if not self.hook_listener_thread.is_alive():
+            self.hook_listener_thread.start()
+
         observation = self.__get_observation()
         extra_info = self.__get_extra_info()
         if return_info:
@@ -49,7 +55,7 @@ class AoS2Environment(gym.Env):
         return observation
 
     def step(self, action: Action) -> StepResult:
-        pressed_buttons = self.__buttons_to_controls(action)
+        self.__press_buttons(action)
 
         observation = self.__get_observation()
         reward = 0
@@ -71,8 +77,12 @@ class AoS2Environment(gym.Env):
         return [
             Controls(i + 1)
             for i, is_pressed in enumerate(buttons)
-            if is_pressed
+            if is_pressed == 1
         ]
+
+    def __press_buttons(self, action_sample: numpy.ndarray) -> None:
+        buttons_to_press = self.__buttons_to_controls(action_sample)
+        self.window.set_new_inputs(buttons_to_press)
 
     def __get_observation(self) -> Observation:
         return 0

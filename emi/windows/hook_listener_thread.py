@@ -1,24 +1,15 @@
 import threading
 import ctypes
 import ctypes.wintypes
+from typing import Callable
 
 import win32con
 
+WindowsEventHookCallbackType = Callable[[int, int, int, int, int, int, int], None]
+
 
 class WindowsHookListenerThread(threading.Thread):
-    @staticmethod
-    def example_win_event_proc_callback(
-            h_win_event_hook: int,
-            event: int,
-            hwnd: int,
-            id_object: int,
-            id_child: int,
-            event_thread_id: int,
-            event_time: int
-    ) -> None:
-        pass
-
-    def __init__(self, callback: callable):
+    def __init__(self, callback: WindowsEventHookCallbackType):
         super().__init__(daemon=True)
         self.hook_handle = 0
         self.callback = callback

@@ -8,3 +8,5 @@ dm_tree
 pandas
 numpy==1.23.5
 gputil
+pydirectinput-rgx
+pydantic
