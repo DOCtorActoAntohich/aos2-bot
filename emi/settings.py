@@ -1,5 +1,9 @@
+import os
+import pathlib
+
 from pydantic import BaseSettings, Field
-import win32con
+
+DOTENV_PATH = pathlib.Path(os.getcwd()) / ".env"
 
 
 class _GameKeys(BaseSettings):
@@ -8,12 +12,16 @@ class _GameKeys(BaseSettings):
     Left: str = Field("left", env="GAME_BUTTON_LEFT")
     Right: str = Field("right", env="GAME_BUTTON_RIGHT")
     Dash: str = Field("space", env="GAME_BUTTON_DASH")
+
     # TODO uncomment after initial testing
     # WeaponA: str = Field("z", env="GAME_BUTTON_WEAPON_A")
     # WeaponB: str = Field("x", env="GAME_BUTTON_WEAPON_B")
     # Special: str = Field("c", env="GAME_BUTTON_WEAPON_SPECIAL")
     # Shield: str = Field("v", env="GAME_BUTTON_SHIELD")
     # Hyper: str = Field("shift", env="GAME_BUTTON_HYPER")
+
+    class Config:
+        env_file = DOTENV_PATH
 
 
 class Settings:
