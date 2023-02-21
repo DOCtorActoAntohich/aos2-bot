@@ -10,6 +10,7 @@ from emi.controls import Controls
 from emi.settings import Settings
 from emi.windows.window import Window
 from emi.windows.hook_listener_thread import WindowsHookListenerThread
+from emi.vision import InterfaceData, OcrError
 
 
 class AoS2Environment(gym.Env):
@@ -34,7 +35,7 @@ class AoS2Environment(gym.Env):
             shape=(768, 1366, 3)
         )
 
-        self.window = Window(Settings.game_name)
+        self.window = Window(Settings.game.name)
         self.hook_listener_thread = WindowsHookListenerThread(self.window.focus_change_callback)
         self.pressed_buttons: list[Controls] = []
 
@@ -69,6 +70,17 @@ class AoS2Environment(gym.Env):
 
         self.window.update()
         frame = self.window.last_frame
+
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        interface = InterfaceData(gray_frame)
+        try:
+            p1_heat = interface.p1_heat
+        except OcrError:
+            p1_heat = -1
+
+        # weird values: 55 119 199 235 253 255
+        print(p1_heat)
+
         cv2.imshow(Settings.opencv_window_name, frame)
         cv2.waitKey(1)
 

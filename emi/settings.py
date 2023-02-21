@@ -3,6 +3,8 @@ import pathlib
 
 from pydantic import BaseSettings, Field
 
+from emi.math import Rect
+
 DOTENV_PATH = pathlib.Path(os.getcwd()) / ".env"
 
 
@@ -24,7 +26,43 @@ class _GameKeys(BaseSettings):
         env_file = DOTENV_PATH
 
 
-class Settings:
-    game_name = "Acceleration of SUGURI 2"
-    opencv_window_name = "Game view"
+class _Ocr(BaseSettings):
+    data_path: str = Field(..., env="TESSDATA_PREFIX")
+
+    class Config:
+        env_file = DOTENV_PATH
+
+
+class _Player1UI:
+    HealthPosition = Rect(90, 32).with_size(200, 30)
+    MeterBarsPosition = Rect(170, 64).with_size(130, 40)
+    HeatPosition = Rect(358, 67).with_size(60, 34)
+    DashCancelIconPosition = Rect(576, 90).with_size(60, 25)
+
+
+class _Player2UI:
+    HealthPosition = Rect(1076, 32).with_size(200, 30)
+    MeterBarsPosition = Rect(1070, 64).with_size(130, 40)
+    HeatPosition = Rect(972, 69).with_size(90, 30)
+    DashCancelIconPosition = Rect(728, 90).with_size(60, 25)
+
+
+class _UI:
+    p1 = _Player1UI()
+    p2 = _Player2UI()
+    Position = Rect(0, 0).with_size(1366, 140)
+    TimerPosition = Rect(618, 0).with_size(128, 80)
+
+
+class _Game:
+    name = "Acceleration of SUGURI 2"
     control_keys = _GameKeys()
+    MinHeat = 0
+    MaxHeat = 300
+
+
+class Settings:
+    game = _Game()
+    opencv_window_name = "Game view"
+    ocr = _Ocr()
+    ui = _UI()
