@@ -1,6 +1,6 @@
 import cv2
 
-from emi.aos2environment import AoS2Environment
+from emi.bot.aos2environment import AoS2Environment
 
 
 def run_environment():

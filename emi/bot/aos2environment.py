@@ -6,11 +6,11 @@ import gym
 import numpy
 import cv2
 
-from emi.controls import Controls
+from emi.bot.controls import Controls
+from emi.bot.vision import InterfaceData, OcrError
 from emi.settings import Settings
 from emi.windows.window import Window
 from emi.windows.hook_listener_thread import WindowsHookListenerThread
-from emi.vision import InterfaceData, OcrError
 
 
 class AoS2Environment(gym.Env):

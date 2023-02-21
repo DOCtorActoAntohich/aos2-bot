@@ -8,7 +8,7 @@ import pydirectinput
 
 from emi.math import Vector2, Rect
 from emi.windows.hook_listener_thread import WindowsEventHookCallbackType
-from emi.controls import Controls
+from emi.bot.controls import Controls
 
 
 class Window:
