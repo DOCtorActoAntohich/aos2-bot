@@ -11,12 +11,17 @@ from emi.math import Rect
 from emi.settings import Settings
 
 
+class Color:
+    White = 255
+
+
 def crop_rect(image: numpy.ndarray, rect: Rect) -> numpy.ndarray:
     return image[rect.top:rect.bottom, rect.left:rect.right]
 
 
-class OcrError(Exception):
-    pass
+def fill_all_contours(mask: numpy.ndarray, contours: list) -> numpy.ndarray:
+    cv2.drawContours(mask, contours, -1, Color.White, thickness=-1)
+    return mask
 
 
 class OcrEngine:
@@ -59,31 +64,34 @@ class InterfaceData:
 
     @property
     def p1_heat(self) -> int:
-        heat_zone = crop_rect(self.ui_frame, Settings.ui.p1.HeatPosition)
-        text = self.__recognize_heat(self.ui_frame)
+        return self.__get_heat(Settings.ui.p1.HeatPosition)
+
+    @property
+    def p2_heat(self) -> int:
+        return self.__get_heat(Settings.ui.p2.HeatPosition)
+
+    def __get_heat(self, heat_zone_location: Rect) -> int:
+        heat_zone = crop_rect(self.ui_frame, heat_zone_location)
+        text = self.__recognize_heat_text(heat_zone)
         return self.__corrected_heat(text)
 
-    def __recognize_heat(self, ui_crop: numpy.ndarray) -> str:
-        _, binary_image = cv2.threshold(ui_crop, self.RedHeatTextGrayscaleThreshold, 255, cv2.THRESH_BINARY_INV)
+    def __recognize_heat_text(self, heat_zone: numpy.ndarray) -> str:
+        _, binary_image = cv2.threshold(heat_zone, self.RedHeatTextGrayscaleThreshold, 255, cv2.THRESH_BINARY_INV)
         contours, _ = cv2.findContours(binary_image, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+        small_contours = self.__filter_small_contours(contours)
 
-        small_contours = self.__filter_heat_text_contours(contours)
+        mask = fill_all_contours(numpy.zeros(heat_zone.shape, numpy.uint8), small_contours)
+        masked_heat_zone = cv2.bitwise_and(heat_zone, heat_zone, mask=mask)
 
-        mask = numpy.zeros(ui_crop.shape, numpy.uint8)
-        cv2.drawContours(mask, small_contours, -1, 255, -1)
-        masked_ui_crop = cv2.bitwise_and(ui_crop, ui_crop, mask=mask)
+        processed_heat_zone = cv2.add(masked_heat_zone, 50)
+        processed_heat_zone = cv2.fastNlMeansDenoising(processed_heat_zone, None, 10, 7, 21)
 
-        p1_heat_zone = crop_rect(masked_ui_crop, Settings.ui.p1.HeatPosition)
-        p1_heat_zone = cv2.add(p1_heat_zone, 50)
-        p1_heat_zone = cv2.fastNlMeansDenoising(p1_heat_zone, None, 10, 7, 21)
-
-        image = Image.fromarray(p1_heat_zone)
-
-        OcrEngine.for_heat_text().SetImage(image)
+        text_source = Image.fromarray(processed_heat_zone)
+        OcrEngine.for_heat_text().SetImage(text_source)
         return OcrEngine.for_heat_text().GetUTF8Text().strip() or ""
 
     @classmethod
-    def __filter_heat_text_contours(cls, contours) -> list:
+    def __filter_small_contours(cls, contours) -> list:
         suitable_contours = []
         for contour in contours:
             area = cv2.contourArea(contour)
@@ -102,10 +110,10 @@ class InterfaceData:
                 fixed_text += self.LettersLikeNumbers[character]
 
         if len(fixed_text) == 0:
-            raise OcrError
+            return -1
 
         heat = int(fixed_text)
         if not Settings.game.MinHeat <= heat <= Settings.game.MaxHeat:
-            raise OcrError
+            return -1
 
         return heat

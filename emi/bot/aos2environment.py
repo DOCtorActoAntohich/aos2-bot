@@ -7,7 +7,7 @@ import numpy
 import cv2
 
 from emi.bot.controls import Controls
-from emi.bot.vision import InterfaceData, OcrError
+from emi.bot.vision import InterfaceData
 from emi.settings import Settings
 from emi.windows.window import Window
 from emi.windows.hook_listener_thread import WindowsHookListenerThread
@@ -73,13 +73,9 @@ class AoS2Environment(gym.Env):
 
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         interface = InterfaceData(gray_frame)
-        try:
-            p1_heat = interface.p1_heat
-        except OcrError:
-            p1_heat = -1
 
         # weird values: 55 119 199 235 253 255
-        print(p1_heat)
+        print(f"HEAT%\t P1: {interface.p1_heat}\t P2: {interface.p2_heat}")
 
         cv2.imshow(Settings.opencv_window_name, frame)
         cv2.waitKey(1)
