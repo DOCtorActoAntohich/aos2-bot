@@ -4,7 +4,7 @@ from typing import Any, SupportsFloat
 
 import gym
 import numpy
-import cv2
+import cv2  # type: ignore
 
 from emi.bot.controls import Controls
 from emi.bot.vision import InterfaceData
@@ -74,8 +74,7 @@ class AoS2Environment(gym.Env):
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         interface = InterfaceData(gray_frame)
 
-        # weird values: 55 119 199 235 253 255
-        print(f"HEAT%\t P1: {interface.p1_heat}\t P2: {interface.p2_heat}")
+        a, b, c, d = interface.p1_health, interface.p2_health, interface.p1_heat, interface.p2_heat
 
         cv2.imshow(Settings.opencv_window_name, frame)
         cv2.waitKey(1)

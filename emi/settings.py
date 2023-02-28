@@ -34,14 +34,14 @@ class _Ocr(BaseSettings):
 
 
 class _Player1UI:
-    HealthPosition = Rect(90, 32).with_size(200, 30)
+    HealthPosition = Rect(92, 36).with_size(220, 20)
     MeterBarsPosition = Rect(170, 64).with_size(130, 40)
     HeatPosition = Rect(358, 67).with_size(60, 34)
     DashCancelIconPosition = Rect(576, 90).with_size(60, 25)
 
 
 class _Player2UI:
-    HealthPosition = Rect(1076, 32).with_size(200, 30)
+    HealthPosition = Rect(1058, 36).with_size(220, 20)
     MeterBarsPosition = Rect(1070, 64).with_size(130, 40)
     HeatPosition = Rect(972, 69).with_size(90, 30)
     DashCancelIconPosition = Rect(728, 90).with_size(60, 25)
@@ -59,6 +59,8 @@ class _Game:
     control_keys = _GameKeys()
     MinHeat = 0
     MaxHeat = 300
+    MinHealth = 0
+    MaxHealth = 9000
 
 
 class Settings:

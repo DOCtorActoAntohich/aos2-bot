@@ -9,5 +9,5 @@ pandas
 numpy==1.23.5
 gputil
 pydirectinput-rgx
-pydantic
+pydantic[dotenv]
 pillow
