@@ -134,10 +134,9 @@ class Window:
             win32con.SRCCOPY
         )
 
-        # for opencv.
         signed_ints_array = data_bit_map.GetBitmapBits(True)  # so true...
         img = numpy.frombuffer(signed_ints_array, dtype=numpy.uint8)
-        img.shape = (self.size.y, self.size.x, 4)  # intended swap because numpy
+        img.shape = (self.size.y, self.size.x, 4)  # intended order because numpy; in-place.
 
         dc_object.DeleteDC()
         compatible_dc.DeleteDC()
