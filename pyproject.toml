@@ -36,8 +36,12 @@ allow_redefinition = true
 
 [[tool.mypy.overrides]]
 module = [
-    "win32con",
+    "cv2",
+    "PIL",
+    "pydirectinput",
     "tesserocr",
-    "cv2"
+    "win32con",
+    "win32gui",
+    "win32ui",
 ]
 ignore_missing_imports = true
