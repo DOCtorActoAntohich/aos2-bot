@@ -2,22 +2,22 @@ from __future__ import annotations
 
 
 class Vector2:
-    def __init__(self, x: int, y: int):
+    def __init__(self, x: int, y: int) -> None:
         self.x = x
         self.y = y
 
     @property
-    def as_tuple(self):
+    def as_tuple(self) -> tuple[int, int]:
         return self.x, self.y
 
 
 class Rect:
     @classmethod
-    def from_tuple(cls, rect: tuple[int, int, int, int]):
+    def from_tuple(cls, rect: tuple[int, int, int, int]) -> Rect:
         left, top, right, bottom = rect
         return cls(left, top, right, bottom)
 
-    def __init__(self, left: int, top: int, right: int = 0, bottom: int = 0):
+    def __init__(self, left: int, top: int, right: int = 0, bottom: int = 0) -> None:
         self.left = left
         self.top = top
         self.right = right

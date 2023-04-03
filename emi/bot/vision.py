@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import string
 
-import cv2  # type: ignore
+import cv2
 import numpy
 import tesserocr
-from PIL import Image  # type: ignore
+from PIL import Image
 
 from emi.math import Rect
 from emi.settings import Settings
@@ -16,7 +16,7 @@ class Color:
 
 
 def crop_rect(image: numpy.ndarray, rect: Rect) -> numpy.ndarray:
-    return image[rect.top:rect.bottom, rect.left:rect.right]
+    return image[rect.top : rect.bottom, rect.left : rect.right]
 
 
 def fill_all_contours(mask: numpy.ndarray, contours: list) -> numpy.ndarray:
@@ -28,7 +28,11 @@ def extend(image: numpy.ndarray, x: int, y: int) -> numpy.ndarray:
     original_y, original_x = image.shape
     new_shape = (original_y + y, original_x + x)
     new_image = numpy.zeros(new_shape, dtype=numpy.uint8)
-    new_image[y // 2: y // 2 + original_y, x // 2: x // 2 + original_x] = image
+    y_start = y // 2
+    y_end = y // 2 + original_y
+    x_start = x // 2
+    x_end = x // 2 + original_x
+    new_image[y_start:y_end, x_start:x_end] = image
     return new_image
 
 
@@ -61,11 +65,11 @@ class OcrEngine:
         return engine.GetUTF8Text().strip() or ""
 
     @classmethod
-    def recognize_heat(cls, raw_image: numpy.ndarray):
+    def recognize_heat(cls, raw_image: numpy.ndarray) -> str:
         return cls.recognize_text(cls.for_heat_text(), raw_image)
 
     @classmethod
-    def recognize_health(cls, raw_image: numpy.ndarray):
+    def recognize_health(cls, raw_image: numpy.ndarray) -> str:
         return cls.recognize_text(cls.for_health_text(), raw_image)
 
 
@@ -80,7 +84,7 @@ class HeatTextContour:
         return cls.MinArea <= area <= cls.MaxArea
 
     @classmethod
-    def has_suitable_aspect_ratio(cls, aspect_ratio):
+    def has_suitable_aspect_ratio(cls, aspect_ratio: float) -> bool:
         return cls.MinAspectRatio <= aspect_ratio <= cls.MaxAspectRatio
 
 
@@ -131,6 +135,8 @@ class InterfaceData:
         return self.__corrected_heat(text)
 
     def __recognize_heat_text(self, heat_zone: numpy.ndarray) -> str:
+        heat_zone = cv2.fastNlMeansDenoising(heat_zone, None, 10, 7, 21)
+
         _, binary_image = cv2.threshold(heat_zone, self.RedHeatTextGrayscaleThreshold, 255, cv2.THRESH_BINARY_INV)
         contours, _ = cv2.findContours(binary_image, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
         small_contours = self.__filter_small_contours(contours)
@@ -138,13 +144,10 @@ class InterfaceData:
         mask = fill_all_contours(numpy.zeros(heat_zone.shape, numpy.uint8), small_contours)
         masked_heat_zone = cv2.bitwise_and(heat_zone, heat_zone, mask=mask)
 
-        processed_heat_zone = cv2.add(masked_heat_zone, 50)
-        processed_heat_zone = cv2.fastNlMeansDenoising(processed_heat_zone, None, 10, 7, 21)
-
-        return OcrEngine.recognize_heat(processed_heat_zone)
+        return OcrEngine.recognize_heat(masked_heat_zone)
 
     @classmethod
-    def __filter_small_contours(cls, contours) -> list:
+    def __filter_small_contours(cls, contours: list) -> list:
         suitable_contours = []
         for contour in contours:
             area = cv2.contourArea(contour)
@@ -167,7 +170,7 @@ class InterfaceData:
 
         return (
             self.__text_to_number(left, Settings.game.MinHealth, Settings.game.MaxHealth),
-            self.__text_to_number(right, Settings.game.MinHealth, Settings.game.MaxHealth)
+            self.__text_to_number(right, Settings.game.MinHealth, Settings.game.MaxHealth),
         )
 
     @classmethod
@@ -182,7 +185,7 @@ class InterfaceData:
 
         return number
 
-    def __correct_text(self, raw_text: str, *, extra_characters="") -> str:
+    def __correct_text(self, raw_text: str, *, extra_characters: str = "") -> str:
         corrected_text = ""
         for character in raw_text.lower():
             if character.isdigit() or character in extra_characters:

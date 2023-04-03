@@ -1,6 +1,7 @@
-import threading
 import ctypes
 import ctypes.wintypes
+import sys
+import threading
 from typing import Callable
 
 import win32con
@@ -9,7 +10,7 @@ WindowsEventHookCallbackType = Callable[[int, int, int, int, int, int, int], Non
 
 
 class WindowsHookListenerThread(threading.Thread):
-    def __init__(self, callback: WindowsEventHookCallbackType):
+    def __init__(self, callback: WindowsEventHookCallbackType) -> None:
         super().__init__(daemon=True)
         self.hook_handle = 0
         self.callback = callback
@@ -26,7 +27,7 @@ class WindowsHookListenerThread(threading.Thread):
             ctypes.wintypes.LONG,
             ctypes.wintypes.LONG,
             ctypes.wintypes.DWORD,
-            ctypes.wintypes.DWORD
+            ctypes.wintypes.DWORD,
         )
         win_event_proc = win_event_proc_type(self.callback)
 
@@ -38,18 +39,17 @@ class WindowsHookListenerThread(threading.Thread):
             win_event_proc,
             0,
             0,
-            win32con.WINEVENT_OUTOFCONTEXT
+            win32con.WINEVENT_OUTOFCONTEXT,
         )
 
         if hook == 0:
-            print("Failed to SetWinEventHook")
-            exit(1)
+            sys.exit("Failed to SetWinEventHook")
 
         msg = ctypes.wintypes.MSG()
         while ctypes.windll.user32.GetMessageW(ctypes.byref(msg), 0, 0, 0) != 0:
             ctypes.windll.user32.TranslateMessageW(msg)
             ctypes.windll.user32.DispatchMessageW(msg)
 
-    def __del__(self):
+    def __del__(self) -> None:
         if self.hook_handle != 0:
             ctypes.windll.user32.UnhookWinEvent(self.hook_handle)

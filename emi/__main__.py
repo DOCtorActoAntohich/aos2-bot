@@ -3,7 +3,7 @@ import cv2
 from emi.bot.aos2environment import AoS2Environment
 
 
-def run_environment():
+def run_environment() -> None:
     environment = AoS2Environment()
     environment.reset()
 
@@ -16,4 +16,3 @@ if __name__ == "__main__":
         run_environment()
     except KeyboardInterrupt:
         cv2.destroyAllWindows()
-        print("Closed forcibly")

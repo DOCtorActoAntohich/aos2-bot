@@ -1,36 +1,39 @@
 from threading import Lock
+from typing import cast
 
 import numpy
+import pydirectinput
+import win32con
 import win32gui
 import win32ui
-import win32con
-import pydirectinput
 
-from emi.math import Vector2, Rect
-from emi.windows.hook_listener_thread import WindowsEventHookCallbackType
 from emi.bot.controls import Controls
+from emi.math import Rect, Vector2
+from emi.windows.hook_listener_thread import WindowsEventHookCallbackType
 
 
 class Window:
     @property
     def focus_change_callback(self) -> WindowsEventHookCallbackType:
-        def callback(
-                h_win_event_hook: int,
-                event: int,
+        # so many warnings just because winapi sucks my mouse.
+        def callback(  # noqa: PLR0913
+                h_win_event_hook: int,  # noqa: ARG001
+                event: int,  # noqa: ARG001
                 hwnd: int,
-                id_object: int,
-                id_child: int,
-                event_thread_id: int,
-                event_time: int
+                id_object: int,  # noqa: ARG001
+                id_child: int,  # noqa: ARG001
+                event_thread_id: int,  # noqa: ARG001
+                event_time: int,  # noqa: ARG001
         ) -> None:
             self.on_focus_change(hwnd)
 
         return callback
 
-    def __init__(self, window_name: str):
+    def __init__(self, window_name: str) -> None:
         self.__handle = win32gui.FindWindow(None, window_name)
         if self.__handle == 0:
-            raise ValueError(f"Window not found: {window_name}")
+            msg = f"Window not found: {window_name}"
+            raise ValueError(msg)
 
         self.__is_active = False
         self.__buttons_control_lock = Lock()
@@ -61,11 +64,11 @@ class Window:
             if self.__is_active:
                 self.__all_keys_down()
 
-    def __all_keys_down(self):
+    def __all_keys_down(self) -> None:
         for button in self.__pressed_buttons:
             self.__key_down(button.to_key_code())
 
-    def __all_keys_up(self):
+    def __all_keys_up(self) -> None:
         for button in self.__pressed_buttons:
             self.__key_up(button.to_key_code())
 
@@ -78,7 +81,7 @@ class Window:
         pydirectinput.keyUp(code)
 
     @property
-    def is_active(self):
+    def is_active(self) -> bool:
         return self.__is_active
 
     @property
@@ -86,7 +89,7 @@ class Window:
         return self.__size
 
     @property
-    def borders_offset(self):
+    def borders_offset(self) -> Vector2:
         return self.__borders
 
     @property
@@ -97,7 +100,7 @@ class Window:
         _, state, *_ = win32gui.GetWindowPlacement(self.__handle)
         return state == win32con.SW_SHOWMINIMIZED
 
-    def __update_size(self):
+    def __update_size(self) -> None:
         client_rect = Rect.from_tuple(win32gui.GetClientRect(self.__handle))
         self.__size = Vector2(client_rect.width, client_rect.height)
 
@@ -131,12 +134,17 @@ class Window:
             self.size.as_tuple,
             dc_object,
             self.borders_offset.as_tuple,
-            win32con.SRCCOPY
+            win32con.SRCCOPY,
         )
 
-        signed_ints_array = data_bit_map.GetBitmapBits(True)  # so true...
-        img = numpy.frombuffer(signed_ints_array, dtype=numpy.uint8)
-        img.shape = (self.size.y, self.size.x, 4)  # intended order because numpy; in-place.
+        # this function has THE MOST misleading type hints lol
+        bitmap_bytes: bytes = cast(bytes, data_bit_map.GetBitmapBits(True))  # so true... # noqa: FBT003
+        img = numpy.frombuffer(bitmap_bytes, dtype=numpy.uint8)
+        img.shape = (
+            self.size.y,
+            self.size.x,
+            4,
+        )  # intended order because numpy; in-place.
 
         dc_object.DeleteDC()
         compatible_dc.DeleteDC()
