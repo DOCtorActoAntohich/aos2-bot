@@ -5,24 +5,25 @@
 ### Prerequisites
 
 - Python 3.10
-- `make`
+- `conda` (tested with `Anaconda3`)
 - A beefy computer ![](https://steamcommunity-a.akamaihd.net/economy/emoticon/:ohh_yeah:)
 
 Clone this repository and go to the root folder.
 
-### Virtual Environment
-
-Create a virtual environment by running `make venv` inside the root folder.
-It will automatically install all required packages with few exceptions.
-
-### Tesseract OCR
-
-Install Tesseract: `choco install tesseract-ocr`.
-Make sure `C:\Program Files\Tesseract-OCR\tessdata` has `eng.traineddata`.
-
-Install [`tesserocr`](https://github.com/sirfz/tesserocr) by downloading `.whl` file that fits your system.
-
 ### Environment
+
+#### Python
+
+In the root folder, run `conda env update --file conda-env.yaml`
+and let it run for a couple of stargates. ![](https://steamcommunity-a.akamaihd.net/economy/emoticon/:ohh_yeah:)
+
+This command should install some cursed dependencies like `tesserocr` and `poetry`.
+
+After it's done, run `poetry install` to install the remaining dependencies.
+
+~~You might need to execute `winget install tesseract-ocr`.~~
+
+#### User config
 
 Create a copy of `sample.env` named `.env` and adjust values as you see fit.
 
@@ -41,7 +42,7 @@ Open the game and change settings as follows:
 - Display AP As Percentage: **OFF**
 - Display Attack Indicator: **ON**
 
-While keeping the game open in the background, execute `make run` in console.
+With the environment activated, execute `python -m emi` in the terminal.
 To stop, press `Ctrl+C`.
 
 ## Issues
