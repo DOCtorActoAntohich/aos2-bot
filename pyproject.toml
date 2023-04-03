@@ -8,15 +8,36 @@ packages = [{ include = "emi" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-gym = "0.23.1"
+gym = "^0.26.2"
 opencv-contrib-python = "4.5.5.64"
 pywin32 = "^306"
 pydirectinput-rgx = "^2.0.7"
 pydantic = { extras = ["dotenv"], version = "^1.10.7" }
 mypy = "^1.1.1"
-tesserocr = "2.6.0"
+tesserocr = "2.5.2"
+black = "^23.3.0"
+ruff = "^0.0.260"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.black]
+line-length = 120
+# Python 3.10.
+target-version = ["py310"]
+# Colored output.
+color = true
+
+[tool.mypy]
+allow_redefinition = true
+
+[[tool.mypy.overrides]]
+module = [
+    "win32con",
+    "tesserocr",
+    "cv2"
+]
+ignore_missing_imports = true
