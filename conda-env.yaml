@@ -5,5 +5,5 @@ channels:
 dependencies:
   - poetry=1.4.1
   - pip=22.3.1
-  - tesserocr=2.5.2
+  - conda-forge::tesserocr=2.5.2
   - python=3.10.*

@@ -38,6 +38,7 @@ allow_redefinition = true
 module = [
     "cv2",
     "PIL",
+    "PIL.Image",
     "pydirectinput",
     "tesserocr",
     "win32con",

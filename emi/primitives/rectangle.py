@@ -1,19 +1,9 @@
 from __future__ import annotations
 
 
-class Vector2:
-    def __init__(self, x: int, y: int) -> None:
-        self.x = x
-        self.y = y
-
-    @property
-    def as_tuple(self) -> tuple[int, int]:
-        return self.x, self.y
-
-
-class Rect:
+class Rectangle:
     @classmethod
-    def from_tuple(cls, rect: tuple[int, int, int, int]) -> Rect:
+    def from_tuple(cls, rect: tuple[int, int, int, int]) -> Rectangle:
         left, top, right, bottom = rect
         return cls(left, top, right, bottom)
 
@@ -23,11 +13,11 @@ class Rect:
         self.right = right
         self.bottom = bottom
 
-    def at_position(self, x: int, y: int) -> Rect:
-        return Rect(x, y, x + self.width, y + self.height)
+    def at_position(self, x: int, y: int) -> Rectangle:
+        return Rectangle(x, y, x + self.width, y + self.height)
 
-    def with_size(self, width: int, height: int) -> Rect:
-        return Rect(self.x, self.y, self.x + width, self.y + height)
+    def with_size(self, width: int, height: int) -> Rectangle:
+        return Rectangle(self.x, self.y, self.x + width, self.y + height)
 
     @property
     def width(self) -> int:

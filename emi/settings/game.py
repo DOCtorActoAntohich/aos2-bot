@@ -1,5 +1,7 @@
 from pydantic import BaseSettings, Field
 
+from emi.primitives import Color
+
 
 class _GameKeysSettings(BaseSettings):
     Up: str = Field("up", env="GAME_BUTTON_UP")
@@ -17,6 +19,8 @@ class _GameKeysSettings(BaseSettings):
 class GameSettings:
     name = "Acceleration of SUGURI 2"
     control_keys = _GameKeysSettings()  # type: ignore # noqa: PGH003
+    p1_attack_indicator_color = Color(0, 0, 255)
+    p2_attack_indicator_color = Color(255, 0, 0)
     MinHeat = 0
     MaxHeat = 300
     MinHealth = 0

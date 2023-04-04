@@ -8,7 +8,7 @@ import win32gui
 import win32ui
 
 from emi.bot.controls import Controls
-from emi.math import Rect, Vector2
+from emi.primitives import Rectangle, Vector2
 from emi.windows.hook_listener_thread import WindowsEventHookCallbackType
 
 
@@ -17,13 +17,13 @@ class Window:
     def focus_change_callback(self) -> WindowsEventHookCallbackType:
         # so many warnings just because winapi sucks my mouse.
         def callback(  # noqa: PLR0913
-                h_win_event_hook: int,  # noqa: ARG001
-                event: int,  # noqa: ARG001
-                hwnd: int,
-                id_object: int,  # noqa: ARG001
-                id_child: int,  # noqa: ARG001
-                event_thread_id: int,  # noqa: ARG001
-                event_time: int,  # noqa: ARG001
+            h_win_event_hook: int,  # noqa: ARG001
+            event: int,  # noqa: ARG001
+            hwnd: int,
+            id_object: int,  # noqa: ARG001
+            id_child: int,  # noqa: ARG001
+            event_thread_id: int,  # noqa: ARG001
+            event_time: int,  # noqa: ARG001
         ) -> None:
             self.on_focus_change(hwnd)
 
@@ -101,11 +101,11 @@ class Window:
         return state == win32con.SW_SHOWMINIMIZED
 
     def __update_size(self) -> None:
-        client_rect = Rect.from_tuple(win32gui.GetClientRect(self.__handle))
+        client_rect = Rectangle.from_tuple(win32gui.GetClientRect(self.__handle))
         self.__size = Vector2(client_rect.width, client_rect.height)
 
     def __update_borders(self) -> None:
-        window_rect = Rect.from_tuple(win32gui.GetWindowRect(self.__handle))
+        window_rect = Rectangle.from_tuple(win32gui.GetWindowRect(self.__handle))
         border_width = (window_rect.width - self.size.x) // 2
         top_bar_height = window_rect.height - border_width - self.size.y
         self.__borders = Vector2(border_width, top_bar_height)
