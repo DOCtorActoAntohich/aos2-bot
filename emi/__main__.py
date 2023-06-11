@@ -24,7 +24,7 @@ def main() -> None:
     args = arguments.parse_args()
 
     if args.gather_screenshots:
-        ScreenshotGathering.run()
+        ScreenshotGathering.run(seconds_between_shots=1)
         return
 
     run_environment()

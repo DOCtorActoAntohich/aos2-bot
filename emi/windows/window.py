@@ -39,6 +39,7 @@ class Window:
         self.__buttons_control_lock = Lock()
         self.__is_minimized = False
         self.__pressed_buttons: list[Controls] = []
+        self.__frames_processed = 0
 
         self.update()
 
@@ -95,6 +96,13 @@ class Window:
     @property
     def last_frame(self) -> numpy.ndarray:
         return self.__last_frame
+
+    @property
+    def frames_processed(self) -> int:
+        return self.__frames_processed
+
+    def reset_frames_counter(self) -> None:
+        self.__frames_processed = 0
 
     def __get_minimized(self) -> bool:
         _, state, *_ = win32gui.GetWindowPlacement(self.__handle)
@@ -153,3 +161,4 @@ class Window:
 
         # drop the alpha channel + avoid errors.
         self.__last_frame = numpy.ascontiguousarray(img[..., :3])
+        self.__frames_processed += 1
