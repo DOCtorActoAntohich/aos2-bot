@@ -1,0 +1,6 @@
+PlayerBlue
+PlayerRed
+IruMine
+IruSmallRocket
+IruBigRocket
+IruTapLaser
