@@ -21,6 +21,7 @@ class GameSettings:
     control_keys = _GameKeysSettings()  # type: ignore # noqa: PGH003
     p1_attack_indicator_color = Color(0, 0, 255)
     p2_attack_indicator_color = Color(255, 0, 0)
+    ArenaRadius = 540  # in its cursed secret units.
     MinHeat = 0
     MaxHeat = 300
     MinHealth = 0
