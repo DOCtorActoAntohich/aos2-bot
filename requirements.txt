@@ -1,0 +1,8 @@
+gym==0.26.2
+opencv-contrib-python==4.5.5.64
+pywin32==306
+pydirectinput-rgx==2.0.7
+pydantic[dotenv]==1.10.9
+pillow==9.4.0
+ultralytics==8.0.117
+gitpython>=3.1.30
