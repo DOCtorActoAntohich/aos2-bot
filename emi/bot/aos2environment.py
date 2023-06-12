@@ -7,7 +7,7 @@ import gym
 import numpy
 
 from emi.bot.controls import Controls
-from emi.bot.vision import InterfaceData
+from emi.bot.vision import ArenaData, InterfaceData
 from emi.settings import Settings
 from emi.windows.hook_listener_thread import WindowsHookListenerThread
 from emi.windows.window import Window
@@ -56,6 +56,9 @@ class AoS2Environment(gym.Env):
 
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         InterfaceData(gray_frame)
+
+        arena = ArenaData(frame)
+        arena.show()
 
         cv2.imshow(Settings.opencv_window_name, frame)
         cv2.waitKey(1)
