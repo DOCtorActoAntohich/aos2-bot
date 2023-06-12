@@ -1,7 +1,7 @@
+import logging
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-import logging
 
 import cv2
 import numpy
@@ -16,7 +16,7 @@ TimeFormat = r"%Y_%m_%d__%H_%M_%S"
 
 class ScreenshotGathering:
     @classmethod
-    def run(cls, *, save_to: Path = DatasetPath, seconds_between_shots: int = 5):
+    def run(cls, *, save_to: Path = DatasetPath, seconds_between_shots: int = 5) -> None:
         logger = logging.getLogger("DATASET")
         window = Window(Settings.game.name)
         session_folder = cls.__make_current_session_folder(save_to)
