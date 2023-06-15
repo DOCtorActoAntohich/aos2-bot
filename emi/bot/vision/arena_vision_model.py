@@ -47,8 +47,8 @@ class Yolo:
 
     @classmethod
     def detect_objects(cls, rgb_image: numpy.ndarray) -> list[YoloDetection]:
-        detection_for_single_image, *_ = cls.__model(rgb_image).pred
-        return [YoloDetection.from_tensor(tensor) for tensor in detection_for_single_image]
+        detections_for_single_image, *_ = cls.__model(rgb_image).pred
+        return [YoloDetection.from_tensor(tensor) for tensor in detections_for_single_image]
 
     @classmethod
     def label(cls, label_id: int) -> str | None:

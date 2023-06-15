@@ -7,7 +7,7 @@ class YoloSettings(BaseSettings):
     repository_name: str = "ultralytics/yolov5"
     weights_path: Path = Path("model/best.pt")
     labels_path: Path = Path("model/labels.txt")
-    nms_confidence_threshold: float = 0.5
+    min_confidence: float = 0.6
     train_image_size: int = 640
 
     @property
