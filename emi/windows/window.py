@@ -35,6 +35,7 @@ class Window:
             msg = f"Window not found: {window_name}"
             raise ValueError(msg)
 
+        self.__last_frame: numpy.ndarray
         self.__is_active = False
         self.__buttons_control_lock = Lock()
         self.__is_minimized = False
@@ -43,13 +44,16 @@ class Window:
 
         self.update()
 
-    def update(self) -> None:
+    def update(self) -> numpy.ndarray:
         self.__is_minimized = self.__get_minimized()
         if self.__is_minimized:
-            return
+            return self.__last_frame
+
         self.__update_size()
         self.__update_borders()
         self.__capture_new_frame()
+
+        return self.__last_frame
 
     def on_focus_change(self, foreground_window_handle: int) -> None:
         if foreground_window_handle == self.__handle:

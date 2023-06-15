@@ -4,7 +4,7 @@ import logging
 import cv2
 
 from emi.bot.aos2environment import AoS2Environment
-from emi.dataset import ScreenshotGathering
+from emi.demos import ObjectDetection, ScreenshotGathering
 
 
 def run_environment() -> None:
@@ -19,12 +19,18 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO)
 
     arguments = argparse.ArgumentParser()
-    arguments.add_argument("--gather-screenshots", action="store_true")
+    demos_group = arguments.add_mutually_exclusive_group()
+    demos_group.add_argument("--gather-screenshots", action="store_true")
+    demos_group.add_argument("--object-detection", action="store_true")
 
     args = arguments.parse_args()
 
     if args.gather_screenshots:
         ScreenshotGathering.run(seconds_between_shots=1)
+        return
+
+    if args.object_detection:
+        ObjectDetection.run()
         return
 
     run_environment()

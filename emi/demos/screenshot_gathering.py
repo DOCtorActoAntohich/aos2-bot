@@ -9,6 +9,8 @@ import numpy
 from emi.settings import Settings
 from emi.windows import Window
 
+__all__ = ("ScreenshotGathering",)
+
 DatasetPath = Path("dataset/")
 ImageExtension = "jpg"
 TimeFormat = r"%Y_%m_%d__%H_%M_%S"
@@ -18,8 +20,10 @@ class ScreenshotGathering:
     @classmethod
     def run(cls, *, save_to: Path = DatasetPath, seconds_between_shots: int = 5) -> None:
         logger = logging.getLogger("DATASET")
+
         window = Window(Settings.game.name)
         session_folder = cls.__make_current_session_folder(save_to)
+
         logger.info(f"Saving screenshots every {seconds_between_shots} second(s)")
         logger.info(f"Find them here: {session_folder}")
 

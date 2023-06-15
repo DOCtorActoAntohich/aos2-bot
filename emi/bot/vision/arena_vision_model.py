@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import cast
 
+import cv2
 import numpy
 import torch
 
@@ -46,7 +47,8 @@ class Yolo:
     __model = _create_model()
 
     @classmethod
-    def detect_objects(cls, rgb_image: numpy.ndarray) -> list[YoloDetection]:
+    def detect_objects(cls, bgr_image: numpy.ndarray) -> list[YoloDetection]:
+        rgb_image = cls.__prepare_frame(bgr_image)
         detections_for_single_image, *_ = cls.__model(rgb_image).pred
         return [YoloDetection.from_tensor(tensor) for tensor in detections_for_single_image]
 
@@ -57,3 +59,8 @@ class Yolo:
     @classmethod
     def __labels(cls) -> dict[int, str]:
         return cast(dict[int, str], cls.__model.names)
+
+    @classmethod
+    def __prepare_frame(cls, bgr_frame: numpy.ndarray) -> numpy.ndarray:
+        rgb_frame: numpy.ndarray = cv2.cvtColor(bgr_frame, cv2.COLOR_BGR2RGB)
+        return rgb_frame.astype(numpy.float32)
