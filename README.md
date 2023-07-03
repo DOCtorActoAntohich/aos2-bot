@@ -1,10 +1,14 @@
 # AoS2 bot
 
-An funny thesis project that wasn't very successful. ![:ohh_yeah:](https://steamcommunity-a.akamaihd.net/economy/emoticon/:ohh_yeah:)
+An ambitious and funny thesis project that wasn't very successful. ![:ohh_yeah:](https://steamcommunity-a.akamaihd.net/economy/emoticon/:ohh_yeah:)
 
-Initial idea: Reinforcement learning bot that gathers observations using Computer Vision.
+Initial idea (proof of concept): Reinforcement learning bot that gathers observations using Computer Vision.
+The target game was my beloved [Acceleration of SUGURI 2](https://store.steampowered.com/app/390710/Acceleration_of_SUGURI_2/).
 
 Results: Only some poor detection. ![:ohh_yeah:](https://steamcommunity-a.akamaihd.net/economy/emoticon/:ohh_yeah:)
+
+It's not gonna receive any updates because the methodology is counter-productive.
+It was a fun and crazy experiment that's not really worth the effort.
 
 ## How to run
 
