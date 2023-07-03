@@ -1,7 +1,7 @@
 .PHONY: format
 format:
-	black ./emi/ && ruff --fix ./emi/
+	black ./src/ && ruff --fix ./src/
 
 .PHONY: lint
 lint:
-	black --check ./emi/ && ruff ./emi/ && mypy --install-types --non-interactive ./emi/
+	black --check ./src/ && ruff ./src/ && mypy --install-types --non-interactive ./src/

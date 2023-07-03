@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import enum
 
-from emi.settings import Settings
+from src.settings import Settings
 
 
 class Controls(enum.Enum):

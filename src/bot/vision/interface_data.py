@@ -3,10 +3,10 @@ from __future__ import annotations
 import cv2
 import numpy
 
-from emi.bot.vision.ocr_engine import OcrEngine
-from emi.bot.vision.opencv_extensions import OpenCvExtensions
-from emi.primitives import Rectangle
-from emi.settings import Settings
+from src.bot.vision.ocr_engine import OcrEngine
+from src.bot.vision.opencv_extensions import OpenCvExtensions
+from src.primitives import Rectangle
+from src.settings import Settings
 
 
 class HeatTextContour:

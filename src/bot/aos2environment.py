@@ -1,16 +1,17 @@
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 import cv2
 import gym
 import numpy
 
-from emi.bot.controls import Controls
-from emi.bot.vision import ArenaData, InterfaceData
-from emi.settings import Settings
-from emi.windows.hook_listener_thread import WindowsHookListenerThread
-from emi.windows.window import Window
+from src.bot.controls import Controls
+from src.bot.vision import ArenaData, InterfaceData
+from src.settings import Settings
+from src.windows.hook_listener_thread import WindowsHookListenerThread
+from src.windows.window import Window
 
 
 class AoS2Environment(gym.Env):
@@ -55,10 +56,11 @@ class AoS2Environment(gym.Env):
         frame = self.window.last_frame
 
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        InterfaceData(gray_frame)
 
+        interface = InterfaceData(gray_frame)
         arena = ArenaData(frame)
-        arena.show()
+
+        logging.info("p1 hp: %s, objects found: %s", interface.p1_health, len(arena.detections))
 
         cv2.imshow(Settings.opencv_window_name, frame)
         cv2.waitKey(1)

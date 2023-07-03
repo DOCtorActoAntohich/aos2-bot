@@ -1,7 +1,7 @@
 import cv2
 import numpy
 
-from emi.primitives import Rectangle
+from src.primitives import Rectangle
 
 
 class OpenCvExtensions:

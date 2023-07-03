@@ -7,8 +7,8 @@ import cv2
 import numpy
 import torch
 
-from emi.primitives import Rectangle
-from emi.settings import Settings
+from src.primitives import Rectangle
+from src.settings import Settings
 
 __all__ = ("Yolo", "YoloDetection")
 

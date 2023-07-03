@@ -1,8 +1,8 @@
-from emi.settings.game import GameSettings
-from emi.settings.ocr import OcrSettings
-from emi.settings.ui_800x600 import UiDescription800x600
-from emi.settings.ui_1366x768 import UiDescription1366x768
-from emi.settings.yolo import YoloSettings
+from src.settings.game import GameSettings
+from src.settings.ocr import OcrSettings
+from src.settings.ui_800x600 import UiDescription800x600
+from src.settings.ui_1366x768 import UiDescription1366x768
+from src.settings.yolo import YoloSettings
 
 
 class Settings:

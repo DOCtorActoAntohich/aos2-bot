@@ -7,9 +7,9 @@ import win32con
 import win32gui
 import win32ui
 
-from emi.bot.controls import Controls
-from emi.primitives import Rectangle, Vector2
-from emi.windows.hook_listener_thread import WindowsEventHookCallbackType
+from src.bot.controls import Controls
+from src.primitives import Rectangle, Vector2
+from src.windows.hook_listener_thread import WindowsEventHookCallbackType
 
 
 class Window:

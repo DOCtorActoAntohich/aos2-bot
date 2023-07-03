@@ -4,7 +4,7 @@ import numpy
 import PIL.Image
 import tesserocr
 
-from emi.settings import Settings
+from src.settings import Settings
 
 
 class OcrEngine:

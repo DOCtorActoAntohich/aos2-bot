@@ -6,8 +6,8 @@ from pathlib import Path
 import cv2
 import numpy
 
-from emi.settings import Settings
-from emi.windows import Window
+from src.settings import Settings
+from src.windows import Window
 
 __all__ = ("ScreenshotGathering",)
 

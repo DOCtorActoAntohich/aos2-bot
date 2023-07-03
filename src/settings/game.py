@@ -1,6 +1,6 @@
 from pydantic import BaseSettings, Field
 
-from emi.primitives import Color
+from src.primitives import Color
 
 
 class _GameKeysSettings(BaseSettings):

@@ -4,10 +4,10 @@ import time
 import cv2
 import numpy
 
-from emi.bot.vision import Yolo, YoloDetection
-from emi.primitives import Color, Rectangle
-from emi.settings import Settings
-from emi.windows import Window
+from src.bot.vision import Yolo, YoloDetection
+from src.primitives import Color, Rectangle
+from src.settings import Settings
+from src.windows import Window
 
 
 class ObjectDetection:
@@ -49,7 +49,7 @@ class ObjectDetection:
 
     @classmethod
     def __render_rectangle(
-            cls, on_frame: numpy.ndarray, first_point: tuple[int, int], second_point: tuple[int, int]
+        cls, on_frame: numpy.ndarray, first_point: tuple[int, int], second_point: tuple[int, int]
     ) -> None:
         color = Color(r=0, g=255, b=0).as_tuple
         thickness = 5

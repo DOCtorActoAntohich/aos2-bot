@@ -3,8 +3,8 @@ import logging
 
 import cv2
 
-from emi.bot.aos2environment import AoS2Environment
-from emi.demos import ObjectDetection, ScreenshotGathering
+from src.bot.aos2environment import AoS2Environment
+from src.demos import ObjectDetection, ScreenshotGathering
 
 
 def run_environment() -> None:

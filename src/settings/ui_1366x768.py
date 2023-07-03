@@ -1,4 +1,4 @@
-from emi.primitives import Rectangle
+from src.primitives import Rectangle
 
 
 class _Player1UiDescription1366x768:
